@@ -4,6 +4,21 @@ namespace VrExample
 {
 	partial class VrPlayer : Player
 	{
+		[Net, Local] LeftHand LeftHand { get; set; }
+		[Net, Local] RightHand RightHand { get; set; }
+
+		private void CreateHands()
+		{
+			LeftHand?.Delete();
+			RightHand?.Delete();
+
+			LeftHand = new() { Owner = this };
+			RightHand = new() { Owner = this };
+
+			LeftHand.Other = RightHand;
+			RightHand.Other = LeftHand;
+		}
+
 		public override void Respawn()
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
@@ -17,8 +32,11 @@ namespace VrExample
 			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = true;
 
+			CreateHands();
+
 			base.Respawn();
 		}
+
 		public override void Simulate( Client cl )
 		{
 			base.Simulate( cl );
