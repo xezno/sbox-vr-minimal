@@ -9,7 +9,7 @@ namespace VrExample
 		{
 			if ( IsClient )
 			{
-				if ( VR.Enabled )
+				if ( Global.IsRunningInVR )
 				{
 					// Use a world panel - we're in VR
 					_ = new VrHudEntity();
