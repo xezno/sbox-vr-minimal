@@ -66,18 +66,22 @@ namespace VrExample
 		private TimeSince timeSinceLastRotation;
 		private void DoRotate()
 		{
-			if ( timeSinceLastRotation > 0.25f )
+			const float deadzone = 0.2f;
+			const float angle = 45f;
+			const float delay = 0.25f;
+
+			if ( timeSinceLastRotation > delay )
 			{
 				var rotate = Input.VR.RightHand.Joystick.Value.x;
 
-				if ( rotate > 0.2f )
+				if ( rotate > deadzone )
 				{
-					Rotation = Rotation.RotateAroundAxis( Vector3.Up, -45f );
+					Rotation = Rotation.RotateAroundAxis( Vector3.Up, -angle );
 					timeSinceLastRotation = 0;
 				}
-				else if ( rotate < -0.2f )
+				else if ( rotate < -deadzone )
 				{
-					Rotation = Rotation.RotateAroundAxis( Vector3.Up, 45f );
+					Rotation = Rotation.RotateAroundAxis( Vector3.Up, angle );
 					timeSinceLastRotation = 0;
 				}
 			}
