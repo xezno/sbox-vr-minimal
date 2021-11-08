@@ -23,8 +23,8 @@ namespace VrExample
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
 
-			Controller = new WalkController(); // TODO
-			Animator = new StandardPlayerAnimator(); // TODO
+			Controller = new VrWalkController();
+			Animator = new VrPlayerAnimator();
 			Camera = new VrCamera();
 
 			EnableAllCollisions = true;
