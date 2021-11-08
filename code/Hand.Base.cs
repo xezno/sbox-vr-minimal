@@ -20,8 +20,6 @@ namespace VrExample
 			Position = InputHand.Transform.Position;
 			Rotation = InputHand.Transform.Rotation;
 
-			EnableDrawing = Local.Client == this.Client;
-
 			Transmit = TransmitType.Always;
 		}
 
