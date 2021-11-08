@@ -25,7 +25,7 @@ namespace VrExample
 
 			Controller = new WalkController(); // TODO
 			Animator = new StandardPlayerAnimator(); // TODO
-			Camera = new ThirdPersonCamera();
+			Camera = new VrCamera();
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
