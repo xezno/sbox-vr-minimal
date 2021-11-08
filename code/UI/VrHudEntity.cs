@@ -27,10 +27,10 @@ namespace VrExample
 				//
 				Rotation *= new Angles( -180, -90, 45 ).ToRotation();
 				Position += Rotation.Forward * 5 + Rotation.Up * 6 - Rotation.Left * 12;
+				WorldScale = 0.1f;
+				Scale = 2.0f;
 
-				WorldScale = 0.5f;
-				Scale = 0.25f;
-				PanelBounds = new Rect( 0, 0, 350, 200 );
+				PanelBounds = new Rect( 0, 0, 1920, 1080 );
 			}
 		}
 	}

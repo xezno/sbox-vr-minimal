@@ -28,7 +28,7 @@ namespace VrExample
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
 
-			if ( Input.VR.IsActive )
+			if ( Client.IsUsingVr )
 			{
 				Controller = new VrWalkController();
 				Animator = new VrPlayerAnimator();
@@ -48,7 +48,7 @@ namespace VrExample
 
 			CreateHands();
 
-			if ( Input.VR.IsActive )
+			if ( Client.IsUsingVr )
 				SetBodyGroup( "Hands", 1 ); // Hide hands
 
 			base.Respawn();
