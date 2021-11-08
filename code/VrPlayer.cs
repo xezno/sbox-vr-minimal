@@ -28,9 +28,18 @@ namespace VrExample
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
 
-			Controller = new VrWalkController();
-			Animator = new VrPlayerAnimator();
-			Camera = new VrCamera();
+			if ( Input.VR.IsActive )
+			{
+				Controller = new VrWalkController();
+				Animator = new VrPlayerAnimator();
+				Camera = new VrCamera();
+			}
+			else
+			{
+				Controller = new WalkController();
+				Animator = new StandardPlayerAnimator();
+				Camera = new FirstPersonCamera();
+			}
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -39,7 +48,8 @@ namespace VrExample
 
 			CreateHands();
 
-			SetBodyGroup( "Hands", 1 ); // Hide hands
+			if ( Input.VR.IsActive )
+				SetBodyGroup( "Hands", 1 ); // Hide hands
 
 			base.Respawn();
 		}
@@ -58,12 +68,16 @@ namespace VrExample
 			RightHand?.Simulate( cl );
 
 			CheckRotate();
+
 			SetVrAnimProperties();
 		}
 
 		public void SetVrAnimProperties()
 		{
 			if ( LifeState != LifeState.Alive )
+				return;
+
+			if ( !Input.VR.IsActive )
 				return;
 
 			SetAnimBool( "b_vr", true );
