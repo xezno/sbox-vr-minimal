@@ -1,0 +1,22 @@
+﻿.main-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    &.is-vr {
+        border-radius: 100px;
+        background-color: rgba( black, 0.1 );
+        backdrop-filter: blur( 50px );
+    }
+}
+
+text {
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 64px;
+    padding: 50px;
+    color: white;
+    text-shadow: 0 0 10px rgba( black, 0.25 );
+}
