@@ -35,6 +35,17 @@ namespace VrExample
 
 			Position = InputHand.Transform.Position;
 			Rotation = InputHand.Transform.Rotation;
+
+			Animate();
+		}
+
+		private void Animate()
+		{
+			SetAnimBool( "Grabbing", true ); // TODO
+			SetAnimFloat( "Index", InputHand.GetFingerCurl( 1 ) );
+			SetAnimFloat( "Middle", InputHand.GetFingerCurl( 2 ) );
+			SetAnimFloat( "Ring", InputHand.GetFingerCurl( 3 ) );
+			SetAnimFloat( "Thumb", InputHand.GetFingerCurl( 0 ) );
 		}
 	}
 }

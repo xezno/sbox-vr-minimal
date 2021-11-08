@@ -7,6 +7,8 @@ namespace VrExample
 		[Net, Local] public LeftHand LeftHand { get; set; }
 		[Net, Local] public RightHand RightHand { get; set; }
 
+		private ModelEntity Puppet { get; set; }
+
 		private void CreateHands()
 		{
 			LeftHand?.Delete();
@@ -46,10 +48,8 @@ namespace VrExample
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
-			// EnableHideInFirstPerson = true;
+			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = true;
-
-			SetBodyGroup( "Hands", 1 );
 
 			CreateHands();
 
@@ -60,8 +60,7 @@ namespace VrExample
 		{
 			base.ClientSpawn();
 
-			Log.Trace( "client spawn" );
-			SetBodyGroup( "Head", 1 ); // Hide head locally
+			Puppet = CreatePuppet( this );
 		}
 
 		private TimeSince timeSinceLastRotation;
