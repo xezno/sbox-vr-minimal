@@ -208,6 +208,6 @@
 		]
 		model_archetype = ""
 		primary_associated_entity = ""
-		anim_graph_name = "models/handright.vanmgrph"
+		anim_graph_name = "animgraphs/hands/handright.vanmgrph"
 	}
 }
