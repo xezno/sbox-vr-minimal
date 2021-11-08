@@ -1,0 +1,6 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Allow .vfx & .fxc files to have hlsl syntax highlighting
+*.vfx   linguist-language=HLSL
+*.fxc   linguist-language=HLSL
