@@ -18,7 +18,7 @@ namespace VrExample
 			SetModel( ModelPath );
 
 			Position = InputHand.Transform.Position;
-			Rotation = Rotation.From( 0, 0, 0 );
+			Rotation = InputHand.Transform.Rotation;
 
 			EnableDrawing = Local.Client == this.Client;
 		}
@@ -35,7 +35,6 @@ namespace VrExample
 
 		private void Animate()
 		{
-			SetAnimBool( "Grabbing", true ); // TODO
 			SetAnimFloat( "Index", InputHand.GetFingerCurl( 1 ) );
 			SetAnimFloat( "Middle", InputHand.GetFingerCurl( 2 ) );
 			SetAnimFloat( "Ring", InputHand.GetFingerCurl( 3 ) );
