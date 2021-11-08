@@ -112,16 +112,17 @@ namespace VrExample
 			const float angle = 45f;
 			const float delay = 0.25f;
 
+			float rotate = Input.VR.RightHand.Joystick.Value.x;
+
 			if ( timeSinceLastRotation > delay )
 			{
-				var rotate = Input.VR.RightHand.Joystick.Value.x;
-
 				if ( rotate > deadzone )
 				{
 					Transform = Transform.RotateAround(
 						Input.VR.Head.Position.WithZ( Position.z ),
 						Rotation.FromAxis( Vector3.Up, -angle )
 					);
+
 					timeSinceLastRotation = 0;
 				}
 				else if ( rotate < -deadzone )
@@ -130,8 +131,14 @@ namespace VrExample
 						Input.VR.Head.Position.WithZ( Position.z ),
 						Rotation.FromAxis( Vector3.Up, angle )
 					);
+
 					timeSinceLastRotation = 0;
 				}
+			}
+
+			if ( rotate > -deadzone && rotate < deadzone )
+			{
+				timeSinceLastRotation = 10;
 			}
 		}
 
