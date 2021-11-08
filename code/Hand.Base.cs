@@ -13,12 +13,6 @@ namespace VrExample
 
 		public virtual Input.VrHand InputHand { get; }
 
-		//
-		// Offsets so that the controllers are in the right place
-		//
-		protected Vector3 PosOffset => InputHand.Transform.Rotation.Backward * 2f + InputHand.Transform.Rotation.Down * 4f;
-		protected Rotation RotOffset => Rotation.FromPitch( 65 );
-
 		public override void Spawn()
 		{
 			SetModel( ModelPath );
