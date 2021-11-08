@@ -64,12 +64,19 @@ namespace VrExample
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
 
+			CheckRotate();
+			SetVrAnimProperties();
+
 			LeftHand?.Simulate( cl );
 			RightHand?.Simulate( cl );
+		}
 
-			CheckRotate();
+		public override void FrameSimulate( Client cl )
+		{
+			base.FrameSimulate( cl );
 
-			SetVrAnimProperties();
+			LeftHand?.FrameSimulate( cl );
+			RightHand?.FrameSimulate( cl );
 		}
 
 		public void SetVrAnimProperties()

@@ -21,15 +21,22 @@ namespace VrExample
 			Rotation = InputHand.Transform.Rotation;
 
 			EnableDrawing = Local.Client == this.Client;
+
+			Transmit = TransmitType.Always;
+		}
+
+		public override void FrameSimulate( Client cl )
+		{
+			base.FrameSimulate( cl );
+
+			Transform = InputHand.Transform;
 		}
 
 		public override void Simulate( Client cl )
 		{
 			base.Simulate( cl );
 
-			Position = InputHand.Transform.Position;
-			Rotation = InputHand.Transform.Rotation;
-
+			Transform = InputHand.Transform;
 			Animate();
 		}
 
