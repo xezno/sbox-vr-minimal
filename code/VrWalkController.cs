@@ -66,10 +66,6 @@ namespace VrExample
 			this.maxs = maxs;
 		}
 
-		Vector3 localPlayerAnchor = Vector3.Zero;
-
-		private bool EnablePhysics { get; set; }
-
 		/// <summary>
 		/// Update the size of the bbox. We should really trigger some shit if this changes.
 		/// </summary>
@@ -84,14 +80,6 @@ namespace VrExample
 
 			Duck.UpdateBBox( ref mins, ref maxs, Pawn.Scale );
 			SetBBox( mins, maxs );
-
-			if ( Input.VR.LeftHand.Joystick.Value.Length > 0.1f )
-			{
-				localPlayerAnchor = headLocal.Position.WithZ( 0 );
-			}
-
-			// TODO: Re-implement leaning logic
-			var worldPlayerAnchor = Pawn.Transform.PointToWorld( localPlayerAnchor );
 		}
 
 		protected float SurfaceFriction;
