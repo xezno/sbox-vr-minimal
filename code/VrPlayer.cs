@@ -98,6 +98,9 @@ namespace VrExample
 		private TimeSince timeSinceLastRotation;
 		private void CheckRotate()
 		{
+			if ( !IsServer ) 
+				return;
+
 			const float deadzone = 0.2f;
 			const float angle = 45f;
 			const float delay = 0.25f;
@@ -108,12 +111,18 @@ namespace VrExample
 
 				if ( rotate > deadzone )
 				{
-					Rotation = Rotation.RotateAroundAxis( Vector3.Up, -angle );
+					Transform = Transform.RotateAround( 
+						Input.VR.Head.Position.WithZ( Position.z ), 
+						Rotation.FromAxis( Vector3.Up, -angle )
+					);
 					timeSinceLastRotation = 0;
 				}
 				else if ( rotate < -deadzone )
 				{
-					Rotation = Rotation.RotateAroundAxis( Vector3.Up, angle );
+					Transform = Transform.RotateAround(
+						Input.VR.Head.Position.WithZ( Position.z ),
+						Rotation.FromAxis( Vector3.Up, angle )
+					);
 					timeSinceLastRotation = 0;
 				}
 			}
