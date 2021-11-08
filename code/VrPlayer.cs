@@ -32,6 +32,8 @@ namespace VrExample
 			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = true;
 
+			SetBodyGroup( "Hands", 1 );
+
 			CreateHands();
 
 			base.Respawn();
