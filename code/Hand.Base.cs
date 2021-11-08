@@ -8,8 +8,8 @@ namespace VrExample
 
 		protected virtual string ModelPath => "";
 
-		protected bool GripPressed => InputHand.Grip > 0.5f;
-		protected bool TriggerPressed => InputHand.Trigger > 0.5f;
+		public bool GripPressed => InputHand.Grip > 0.5f;
+		public bool TriggerPressed => InputHand.Trigger > 0.5f;
 
 		public virtual Input.VrHand InputHand { get; }
 
