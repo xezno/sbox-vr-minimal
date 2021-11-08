@@ -4,8 +4,8 @@ namespace VrExample
 {
 	partial class VrPlayer : Player
 	{
-		[Net, Local] LeftHand LeftHand { get; set; }
-		[Net, Local] RightHand RightHand { get; set; }
+		[Net, Local] public LeftHand LeftHand { get; set; }
+		[Net, Local] public RightHand RightHand { get; set; }
 
 		private void CreateHands()
 		{
@@ -18,6 +18,23 @@ namespace VrExample
 			LeftHand.Other = RightHand;
 			RightHand.Other = LeftHand;
 		}
+
+		private void AnimateVr()
+		{
+			// TODO: Make this line up with the hands properly
+			SetAnimBool( "b_vr", true );
+			var leftHand = Transform.ToLocal( LeftHand.Transform );
+			var rightHand = Transform.ToLocal( RightHand.Transform );
+			SetAnimVector( "left_hand_ik.position", leftHand.Position );
+			SetAnimVector( "right_hand_ik.position", rightHand.Position );
+
+			SetAnimRotation( "left_hand_ik.rotation", leftHand.Rotation * Rotation.From( 65, 0, 90 ) );
+			SetAnimRotation( "right_hand_ik.rotation", rightHand.Rotation * Rotation.From( 65, 0, 90 ) );
+
+			float height = Input.VR.Head.Position.z - Position.z;
+			SetAnimFloat( "duck", 1.0f - ((height - 32f) / 32f) );
+		}
+
 
 		public override void Respawn()
 		{
@@ -43,6 +60,11 @@ namespace VrExample
 		{
 			base.Simulate( cl );
 			SimulateActiveChild( cl, ActiveChild );
+
+			LeftHand.Simulate( cl );
+			RightHand.Simulate( cl );
+
+			AnimateVr();
 		}
 
 		public override void OnKilled()
