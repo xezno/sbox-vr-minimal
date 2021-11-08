@@ -8,22 +8,22 @@ namespace VrExample
 
 		protected virtual string ModelPath => "";
 
-		protected bool GripPressed => Hand.Grip > 0.5f;
-		protected bool TriggerPressed => Hand.Trigger > 0.5f;
+		protected bool GripPressed => InputHand.Grip > 0.5f;
+		protected bool TriggerPressed => InputHand.Trigger > 0.5f;
 
-		public Input.VrHand Hand { get; protected set; }
+		public virtual Input.VrHand InputHand { get; }
 
 		//
 		// Offsets so that the controllers are in the right place
 		//
-		protected Vector3 PosOffset => Hand.Transform.Rotation.Backward * 2f + Hand.Transform.Rotation.Down * 4f;
+		protected Vector3 PosOffset => InputHand.Transform.Rotation.Backward * 2f + InputHand.Transform.Rotation.Down * 4f;
 		protected Rotation RotOffset => Rotation.FromPitch( 65 );
 
 		public override void Spawn()
 		{
 			SetModel( ModelPath );
 
-			Position = Hand.Transform.Position;
+			Position = InputHand.Transform.Position;
 			Rotation = Rotation.From( 0, 0, 0 );
 
 			EnableDrawing = Local.Client == this.Client;
@@ -33,8 +33,8 @@ namespace VrExample
 		{
 			base.Simulate( cl );
 
-			Position = Hand.Transform.Position;
-			Rotation = Hand.Transform.Rotation;
+			Position = InputHand.Transform.Position;
+			Rotation = InputHand.Transform.Rotation;
 		}
 	}
 }
