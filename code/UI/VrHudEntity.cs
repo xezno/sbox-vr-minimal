@@ -6,7 +6,7 @@ namespace VrExample
 	/// <summary>
 	/// This will project the example HUD onto your left wrist
 	/// </summary>
-    public class VrHudEntity : WorldPanel
+	public class VrHudEntity : WorldPanel
 	{
 		public VrHudEntity()
 		{
@@ -18,7 +18,7 @@ namespace VrExample
 		{
 			base.Tick();
 
-			if ( Local.Pawn is VrPlayer player ) 
+			if ( Local.Pawn is VrPlayer player )
 			{
 				Transform = player.LeftHand.Transform;
 

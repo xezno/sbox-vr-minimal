@@ -1,6 +1,6 @@
 ﻿namespace VrExample
 {
-    public static class TransformExtensions
+	public static class TransformExtensions
 	{
 		public static Transform RotateAround( this Transform transform, Vector3 pivotPoint, Rotation rotation )
 		{
