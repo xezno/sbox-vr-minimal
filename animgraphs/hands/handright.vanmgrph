@@ -116,6 +116,7 @@
 		[
 			{
 				_class = "CAnimGraphGeneralSettings"
+				m_iGridSnap = 16
 			},
 			{
 				_class = "CAnimGraphNetworkSettings"
@@ -134,7 +135,7 @@
 	}
 	m_previewModels = 
 	[
-		"models/handleft.vmdl",
+		"models/hands/handleft.vmdl",
 	]
 	m_nodes = 
 	[
