@@ -95,8 +95,8 @@ namespace VrExample
 			SetAnimVector( "left_hand_ik.position", leftHandLocal.Position + (handOffset * leftHandLocal.Rotation) );
 			SetAnimVector( "right_hand_ik.position", rightHandLocal.Position + (handOffset * rightHandLocal.Rotation) );
 
-			SetAnimRotation( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 65, 0, 90 ) );
-			SetAnimRotation( "right_hand_ik.rotation", rightHandLocal.Rotation * Rotation.From( 65, 0, 90 ) );
+			SetAnimRotation( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 0, 0, 180 ) );
+			SetAnimRotation( "right_hand_ik.rotation", rightHandLocal.Rotation );
 
 			float height = Input.VR.Head.Position.z - Position.z;
 			SetAnimFloat( "duck", 1.0f - ((height - 32f) / 32f) ); // This will probably need tweaking depending on height
