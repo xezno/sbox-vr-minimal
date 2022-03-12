@@ -2,9 +2,9 @@
 
 namespace VrExample
 {
-	public partial class BaseHand : AnimEntity
+	public partial class VrBaseHand : AnimEntity
 	{
-		[Net] public BaseHand Other { get; set; }
+		[Net] public VrBaseHand Other { get; set; }
 
 		protected virtual string ModelPath => "";
 

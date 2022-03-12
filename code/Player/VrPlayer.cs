@@ -4,8 +4,8 @@ namespace VrExample
 {
 	partial class VrPlayer : Player
 	{
-		[Net, Local] public LeftHand LeftHand { get; set; }
-		[Net, Local] public RightHand RightHand { get; set; }
+		[Net, Local] public VrLeftHand LeftHand { get; set; }
+		[Net, Local] public VrRightHand RightHand { get; set; }
 
 		private void CreateHands()
 		{
