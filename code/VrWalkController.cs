@@ -88,16 +88,16 @@ namespace VrExample
 		{
 			base.FrameSimulate();
 
-			EyeRot = Input.VR.Head.Rotation;
+			EyeRotation = Input.VR.Head.Rotation;
 		}
 
 		public override void Simulate()
 		{
-			EyePosLocal = Vector3.Up * (EyeHeight * Pawn.Scale);
+			EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
 			UpdateBBox();
 
-			EyePosLocal += TraceOffset;
-			EyeRot = Input.VR.Head.Rotation;
+			EyeLocalPosition += TraceOffset;
+			EyeRotation = Input.VR.Head.Rotation;
 
 			RestoreGroundPos();
 
@@ -107,7 +107,7 @@ namespace VrExample
 			// RunLadderMode
 
 			CheckLadder();
-			Swimming = Pawn.WaterLevel.Fraction > 0.6f;
+			Swimming = Pawn.WaterLevel > 0.6f;
 
 			//
 			// Start Gravity
@@ -244,7 +244,7 @@ namespace VrExample
 
 				if ( pm.Fraction == 1 )
 				{
-					Position = pm.EndPos;
+					Position = pm.EndPosition;
 					StayOnGround();
 					return;
 				}
@@ -502,7 +502,7 @@ namespace VrExample
 
 			if ( bMoveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f )
 			{
-				Position = pm.EndPos;
+				Position = pm.EndPosition;
 			}
 		}
 
@@ -560,7 +560,7 @@ namespace VrExample
 
 			// See how far up we can go without getting stuck
 			var trace = TraceBBox( Position, start );
-			start = trace.EndPos;
+			start = trace.EndPosition;
 
 			// Now trace down from a known safe position
 			trace = TraceBBox( start, end );
@@ -570,7 +570,7 @@ namespace VrExample
 			if ( trace.StartedSolid ) return;
 			if ( Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle ) return;
 
-			Position = trace.EndPos;
+			Position = trace.EndPosition;
 		}
 
 		void RestoreGroundPos()

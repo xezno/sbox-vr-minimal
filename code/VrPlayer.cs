@@ -32,13 +32,13 @@ namespace VrExample
 			{
 				Controller = new VrWalkController();
 				Animator = new VrPlayerAnimator();
-				Camera = new VrCamera();
+				CameraMode = new VrCamera();
 			}
 			else
 			{
 				Controller = new WalkController();
 				Animator = new StandardPlayerAnimator();
-				Camera = new FirstPersonCamera();
+				CameraMode = new FirstPersonCamera();
 			}
 
 			EnableAllCollisions = true;
@@ -87,19 +87,19 @@ namespace VrExample
 			if ( !Input.VR.IsActive )
 				return;
 
-			SetAnimBool( "b_vr", true );
+			SetAnimParameter( "b_vr", true );
 			var leftHandLocal = Transform.ToLocal( LeftHand.GetBoneTransform( 0 ) );
 			var rightHandLocal = Transform.ToLocal( RightHand.GetBoneTransform( 0 ) );
 
 			var handOffset = Vector3.Zero;
-			SetAnimVector( "left_hand_ik.position", leftHandLocal.Position + (handOffset * leftHandLocal.Rotation) );
-			SetAnimVector( "right_hand_ik.position", rightHandLocal.Position + (handOffset * rightHandLocal.Rotation) );
+			SetAnimParameter( "left_hand_ik.position", leftHandLocal.Position + (handOffset * leftHandLocal.Rotation) );
+			SetAnimParameter( "right_hand_ik.position", rightHandLocal.Position + (handOffset * rightHandLocal.Rotation) );
 
-			SetAnimRotation( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 0, 0, 180 ) );
-			SetAnimRotation( "right_hand_ik.rotation", rightHandLocal.Rotation );
+			SetAnimParameter( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 0, 0, 180 ) );
+			SetAnimParameter( "right_hand_ik.rotation", rightHandLocal.Rotation );
 
 			float height = Input.VR.Head.Position.z - Position.z;
-			SetAnimFloat( "duck", 1.0f - ((height - 32f) / 32f) ); // This will probably need tweaking depending on height
+			SetAnimParameter( "duck", 1.0f - ((height - 32f) / 32f) ); // This will probably need tweaking depending on height
 		}
 
 		private TimeSince timeSinceLastRotation;
