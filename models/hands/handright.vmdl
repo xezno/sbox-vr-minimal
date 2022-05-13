@@ -47,7 +47,10 @@
 						_class = "PhysicsHullFromRender"
 						parent_bone = ""
 						surface_prop = "default"
-						collision_prop = "default"
+						collision_group = ""
+						collision_interact_as = ""
+						collision_interact_with = ""
+						collision_interact_exclude = ""
 						faceMergeAngle = 5.0
 						maxHullVertices = 53
 					},
@@ -209,5 +212,6 @@
 		model_archetype = ""
 		primary_associated_entity = ""
 		anim_graph_name = "animgraphs/hands/handright.vanmgrph"
+		base_model_name = ""
 	}
 }
