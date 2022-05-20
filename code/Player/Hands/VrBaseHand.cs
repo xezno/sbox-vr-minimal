@@ -2,7 +2,7 @@
 
 namespace VrExample
 {
-	public partial class VrBaseHand : AnimEntity
+	public partial class VrBaseHand : AnimatedEntity
 	{
 		[Net] public VrBaseHand Other { get; set; }
 
