@@ -3,7 +3,7 @@ using System;
 
 namespace VrExample;
 
-public class VrPlayerAnimator : StandardPlayerAnimator
+public class PlayerAnimator : StandardPlayerAnimator
 {
 	float duck;
 

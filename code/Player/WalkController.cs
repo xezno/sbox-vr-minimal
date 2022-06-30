@@ -3,7 +3,7 @@
 namespace VrExample;
 
 [Library]
-public class VrWalkController : BasePlayerController
+public class WalkController : BasePlayerController
 {
 	public float Speed => 100.0f;
 	public float Acceleration => 10.0f;
@@ -31,7 +31,7 @@ public class VrWalkController : BasePlayerController
 	public Unstuck Unstuck;
 
 
-	public VrWalkController()
+	public WalkController()
 	{
 		Duck = new Duck( this );
 		Unstuck = new Unstuck( this );

@@ -2,7 +2,7 @@
 
 namespace VrExample;
 
-public class VrLeftHand : VrBaseHand
+public class LeftHand : HandEntity
 {
 	protected override string ModelPath => "models/hands/handleft.vmdl";
 	public override Input.VrHand InputHand => Input.VR.LeftHand;

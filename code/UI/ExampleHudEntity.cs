@@ -12,7 +12,7 @@ public class ExampleHudEntity : HudEntity<RootPanel>
 			if ( Global.IsRunningInVR )
 			{
 				// Use a world panel - we're in VR
-				_ = new VrHudEntity();
+				_ = new HudEntity();
 			}
 			else
 			{

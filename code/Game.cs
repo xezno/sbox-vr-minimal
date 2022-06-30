@@ -2,9 +2,9 @@
 
 namespace VrExample;
 
-public partial class VrGame : Game
+public partial class Game : Sandbox.Game
 {
-	public VrGame()
+	public Game()
 	{
 		if ( IsServer )
 		{
@@ -16,7 +16,7 @@ public partial class VrGame : Game
 	{
 		base.ClientJoined( client );
 
-		var player = new VrPlayer();
+		var player = new Player();
 		client.Pawn = player;
 
 		player.Respawn();

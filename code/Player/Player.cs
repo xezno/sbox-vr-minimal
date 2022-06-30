@@ -2,10 +2,10 @@
 
 namespace VrExample;
 
-partial class VrPlayer : Player
+partial class Player : Sandbox.Player
 {
-	[Net, Local] public VrLeftHand LeftHand { get; set; }
-	[Net, Local] public VrRightHand RightHand { get; set; }
+	[Net, Local] public LeftHand LeftHand { get; set; }
+	[Net, Local] public RightHand RightHand { get; set; }
 
 	private void CreateHands()
 	{
@@ -30,13 +30,12 @@ partial class VrPlayer : Player
 
 		if ( Client.IsUsingVr )
 		{
-			Controller = new VrWalkController();
-			Animator = new VrPlayerAnimator();
-			CameraMode = new VrCamera();
+			Controller = new WalkController();
+			Animator = new PlayerAnimator();
 		}
 		else
 		{
-			Controller = new WalkController();
+			Controller = new Sandbox.WalkController();
 			Animator = new StandardPlayerAnimator();
 			CameraMode = new FirstPersonCamera();
 		}
@@ -147,5 +146,14 @@ partial class VrPlayer : Player
 		base.OnKilled();
 		EnableDrawing = false;
 		DeleteHands();
+	}
+
+	public override void PostCameraSetup( ref CameraSetup setup )
+	{
+		// You will probably need to tweak these depending on your use case
+		setup.ZNear = 1;
+		setup.ZFar = 25000;
+
+		base.PostCameraSetup( ref setup );
 	}
 }

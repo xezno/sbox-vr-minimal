@@ -6,9 +6,9 @@ namespace VrExample;
 /// <summary>
 /// This will project the example HUD onto your left wrist
 /// </summary>
-public class VrHudEntity : WorldPanel
+public class HudEntity : WorldPanel
 {
-	public VrHudEntity()
+	public HudEntity()
 	{
 		SetTemplate( "/Code/UI/ExampleHud.html" );
 		SetClass( "is-vr", true );
@@ -18,7 +18,7 @@ public class VrHudEntity : WorldPanel
 	{
 		base.Tick();
 
-		if ( Local.Pawn is VrPlayer player )
+		if ( Local.Pawn is Player player )
 		{
 			Transform = player.LeftHand.Transform;
 
