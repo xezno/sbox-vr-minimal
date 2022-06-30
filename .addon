@@ -1,18 +1,27 @@
 {
-  "Title": "VR Minimal",
+  "Title": "Minimal VR Example",
   "Type": "game",
-  "Org": "local",
+  "Org": "alex",
   "Ident": "vrminimal",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": null,
+  "ResourcePaths": [
+    "/code/UI/*"
+  ],
   "HasCode": true,
   "CodePath": "code",
   "RootNamespace": "VrExample",
   "Metadata": {
     "MapList": [
       "facepunch.construct"
-    ]
+    ],
+    "PerMapRanking": false,
+    "LeaderboardType": 0,
+    "RankType": 0,
+    "MapSelect": 0,
+    "GameNetworkType": 0,
+    "MaxPlayers": 16,
+    "MinPlayers": 0
   }
 }
