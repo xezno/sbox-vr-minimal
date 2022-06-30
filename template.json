@@ -2,5 +2,8 @@
     "Title": "VR Minimal",
     "Type": "game",
     "Icon": "panorama_photosphere",
+    "ResourcePaths": [
+        "/code/UI/*"
+    ],
     "Order": 0
 }
