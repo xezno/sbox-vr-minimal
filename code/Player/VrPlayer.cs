@@ -1,152 +1,151 @@
 ﻿using Sandbox;
 
-namespace VrExample
+namespace VrExample;
+
+partial class VrPlayer : Player
 {
-	partial class VrPlayer : Player
+	[Net, Local] public VrLeftHand LeftHand { get; set; }
+	[Net, Local] public VrRightHand RightHand { get; set; }
+
+	private void CreateHands()
 	{
-		[Net, Local] public VrLeftHand LeftHand { get; set; }
-		[Net, Local] public VrRightHand RightHand { get; set; }
+		DeleteHands();
 
-		private void CreateHands()
+		LeftHand = new() { Owner = this };
+		RightHand = new() { Owner = this };
+
+		LeftHand.Other = RightHand;
+		RightHand.Other = LeftHand;
+	}
+
+	private void DeleteHands()
+	{
+		LeftHand?.Delete();
+		RightHand?.Delete();
+	}
+
+	public override void Respawn()
+	{
+		SetModel( "models/citizen/citizen.vmdl" );
+
+		if ( Client.IsUsingVr )
 		{
-			DeleteHands();
-
-			LeftHand = new() { Owner = this };
-			RightHand = new() { Owner = this };
-
-			LeftHand.Other = RightHand;
-			RightHand.Other = LeftHand;
+			Controller = new VrWalkController();
+			Animator = new VrPlayerAnimator();
+			CameraMode = new VrCamera();
+		}
+		else
+		{
+			Controller = new WalkController();
+			Animator = new StandardPlayerAnimator();
+			CameraMode = new FirstPersonCamera();
 		}
 
-		private void DeleteHands()
-		{
-			LeftHand?.Delete();
-			RightHand?.Delete();
-		}
+		EnableAllCollisions = true;
+		EnableDrawing = true;
+		EnableHideInFirstPerson = true;
+		EnableShadowInFirstPerson = true;
 
-		public override void Respawn()
-		{
-			SetModel( "models/citizen/citizen.vmdl" );
+		CreateHands();
 
-			if ( Client.IsUsingVr )
+		if ( Client.IsUsingVr )
+			SetBodyGroup( "Hands", 1 ); // Hide hands
+
+		base.Respawn();
+	}
+
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+	}
+
+	public override void Simulate( Client cl )
+	{
+		base.Simulate( cl );
+		SimulateActiveChild( cl, ActiveChild );
+
+		CheckRotate();
+		SetVrAnimProperties();
+
+		LeftHand?.Simulate( cl );
+		RightHand?.Simulate( cl );
+	}
+
+	public override void FrameSimulate( Client cl )
+	{
+		base.FrameSimulate( cl );
+
+		LeftHand?.FrameSimulate( cl );
+		RightHand?.FrameSimulate( cl );
+	}
+
+	public void SetVrAnimProperties()
+	{
+		if ( LifeState != LifeState.Alive )
+			return;
+
+		if ( !Input.VR.IsActive )
+			return;
+
+		SetAnimParameter( "b_vr", true );
+		var leftHandLocal = Transform.ToLocal( LeftHand.GetBoneTransform( 0 ) );
+		var rightHandLocal = Transform.ToLocal( RightHand.GetBoneTransform( 0 ) );
+
+		var handOffset = Vector3.Zero;
+		SetAnimParameter( "left_hand_ik.position", leftHandLocal.Position + (handOffset * leftHandLocal.Rotation) );
+		SetAnimParameter( "right_hand_ik.position", rightHandLocal.Position + (handOffset * rightHandLocal.Rotation) );
+
+		SetAnimParameter( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 0, 0, 180 ) );
+		SetAnimParameter( "right_hand_ik.rotation", rightHandLocal.Rotation );
+
+		float height = Input.VR.Head.Position.z - Position.z;
+		SetAnimParameter( "duck", 1.0f - ((height - 32f) / 32f) ); // This will probably need tweaking depending on height
+	}
+
+	private TimeSince timeSinceLastRotation;
+	private void CheckRotate()
+	{
+		if ( !IsServer )
+			return;
+
+		const float deadzone = 0.2f;
+		const float angle = 45f;
+		const float delay = 0.25f;
+
+		float rotate = Input.VR.RightHand.Joystick.Value.x;
+
+		if ( timeSinceLastRotation > delay )
+		{
+			if ( rotate > deadzone )
 			{
-				Controller = new VrWalkController();
-				Animator = new VrPlayerAnimator();
-				CameraMode = new VrCamera();
+				Transform = Transform.RotateAround(
+					Input.VR.Head.Position.WithZ( Position.z ),
+					Rotation.FromAxis( Vector3.Up, -angle )
+				);
+
+				timeSinceLastRotation = 0;
 			}
-			else
+			else if ( rotate < -deadzone )
 			{
-				Controller = new WalkController();
-				Animator = new StandardPlayerAnimator();
-				CameraMode = new FirstPersonCamera();
-			}
+				Transform = Transform.RotateAround(
+					Input.VR.Head.Position.WithZ( Position.z ),
+					Rotation.FromAxis( Vector3.Up, angle )
+				);
 
-			EnableAllCollisions = true;
-			EnableDrawing = true;
-			EnableHideInFirstPerson = true;
-			EnableShadowInFirstPerson = true;
-
-			CreateHands();
-
-			if ( Client.IsUsingVr )
-				SetBodyGroup( "Hands", 1 ); // Hide hands
-
-			base.Respawn();
-		}
-
-		public override void ClientSpawn()
-		{
-			base.ClientSpawn();
-		}
-
-		public override void Simulate( Client cl )
-		{
-			base.Simulate( cl );
-			SimulateActiveChild( cl, ActiveChild );
-
-			CheckRotate();
-			SetVrAnimProperties();
-
-			LeftHand?.Simulate( cl );
-			RightHand?.Simulate( cl );
-		}
-
-		public override void FrameSimulate( Client cl )
-		{
-			base.FrameSimulate( cl );
-
-			LeftHand?.FrameSimulate( cl );
-			RightHand?.FrameSimulate( cl );
-		}
-
-		public void SetVrAnimProperties()
-		{
-			if ( LifeState != LifeState.Alive )
-				return;
-
-			if ( !Input.VR.IsActive )
-				return;
-
-			SetAnimParameter( "b_vr", true );
-			var leftHandLocal = Transform.ToLocal( LeftHand.GetBoneTransform( 0 ) );
-			var rightHandLocal = Transform.ToLocal( RightHand.GetBoneTransform( 0 ) );
-
-			var handOffset = Vector3.Zero;
-			SetAnimParameter( "left_hand_ik.position", leftHandLocal.Position + (handOffset * leftHandLocal.Rotation) );
-			SetAnimParameter( "right_hand_ik.position", rightHandLocal.Position + (handOffset * rightHandLocal.Rotation) );
-
-			SetAnimParameter( "left_hand_ik.rotation", leftHandLocal.Rotation * Rotation.From( 0, 0, 180 ) );
-			SetAnimParameter( "right_hand_ik.rotation", rightHandLocal.Rotation );
-
-			float height = Input.VR.Head.Position.z - Position.z;
-			SetAnimParameter( "duck", 1.0f - ((height - 32f) / 32f) ); // This will probably need tweaking depending on height
-		}
-
-		private TimeSince timeSinceLastRotation;
-		private void CheckRotate()
-		{
-			if ( !IsServer )
-				return;
-
-			const float deadzone = 0.2f;
-			const float angle = 45f;
-			const float delay = 0.25f;
-
-			float rotate = Input.VR.RightHand.Joystick.Value.x;
-
-			if ( timeSinceLastRotation > delay )
-			{
-				if ( rotate > deadzone )
-				{
-					Transform = Transform.RotateAround(
-						Input.VR.Head.Position.WithZ( Position.z ),
-						Rotation.FromAxis( Vector3.Up, -angle )
-					);
-
-					timeSinceLastRotation = 0;
-				}
-				else if ( rotate < -deadzone )
-				{
-					Transform = Transform.RotateAround(
-						Input.VR.Head.Position.WithZ( Position.z ),
-						Rotation.FromAxis( Vector3.Up, angle )
-					);
-
-					timeSinceLastRotation = 0;
-				}
-			}
-
-			if ( rotate > -deadzone && rotate < deadzone )
-			{
-				timeSinceLastRotation = 10;
+				timeSinceLastRotation = 0;
 			}
 		}
 
-		public override void OnKilled()
+		if ( rotate > -deadzone && rotate < deadzone )
 		{
-			base.OnKilled();
-			EnableDrawing = false;
-			DeleteHands();
+			timeSinceLastRotation = 10;
 		}
+	}
+
+	public override void OnKilled()
+	{
+		base.OnKilled();
+		EnableDrawing = false;
+		DeleteHands();
 	}
 }

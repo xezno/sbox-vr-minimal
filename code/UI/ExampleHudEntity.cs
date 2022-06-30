@@ -1,24 +1,23 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 
-namespace VrExample
+namespace VrExample;
+
+public class ExampleHudEntity : HudEntity<RootPanel>
 {
-	public class ExampleHudEntity : HudEntity<RootPanel>
+	public ExampleHudEntity()
 	{
-		public ExampleHudEntity()
+		if ( IsClient )
 		{
-			if ( IsClient )
+			if ( Global.IsRunningInVR )
 			{
-				if ( Global.IsRunningInVR )
-				{
-					// Use a world panel - we're in VR
-					_ = new VrHudEntity();
-				}
-				else
-				{
-					// Just display the HUD on-screen
-					RootPanel.SetTemplate( "/Code/UI/ExampleHud.html" );
-				}
+				// Use a world panel - we're in VR
+				_ = new VrHudEntity();
+			}
+			else
+			{
+				// Just display the HUD on-screen
+				RootPanel.SetTemplate( "/Code/UI/ExampleHud.html" );
 			}
 		}
 	}

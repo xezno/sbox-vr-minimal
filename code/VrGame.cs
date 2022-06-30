@@ -1,25 +1,24 @@
 ﻿using Sandbox;
 
-namespace VrExample
+namespace VrExample;
+
+public partial class VrGame : Game
 {
-	public partial class VrGame : Game
+	public VrGame()
 	{
-		public VrGame()
+		if ( IsServer )
 		{
-			if ( IsServer )
-			{
-				_ = new ExampleHudEntity();
-			}
+			_ = new ExampleHudEntity();
 		}
+	}
 
-		public override void ClientJoined( Client client )
-		{
-			base.ClientJoined( client );
+	public override void ClientJoined( Client client )
+	{
+		base.ClientJoined( client );
 
-			var player = new VrPlayer();
-			client.Pawn = player;
+		var player = new VrPlayer();
+		client.Pawn = player;
 
-			player.Respawn();
-		}
+		player.Respawn();
 	}
 }

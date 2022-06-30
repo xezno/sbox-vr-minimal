@@ -1,49 +1,48 @@
 ﻿using Sandbox;
 
-namespace VrExample
+namespace VrExample;
+
+public partial class VrBaseHand : AnimatedEntity
 {
-	public partial class VrBaseHand : AnimatedEntity
+	[Net] public VrBaseHand Other { get; set; }
+
+	protected virtual string ModelPath => "";
+
+	public bool GripPressed => InputHand.Grip > 0.5f;
+	public bool TriggerPressed => InputHand.Trigger > 0.5f;
+
+	public virtual Input.VrHand InputHand { get; }
+
+	public override void Spawn()
 	{
-		[Net] public VrBaseHand Other { get; set; }
+		SetModel( ModelPath );
 
-		protected virtual string ModelPath => "";
+		Position = InputHand.Transform.Position;
+		Rotation = InputHand.Transform.Rotation;
 
-		public bool GripPressed => InputHand.Grip > 0.5f;
-		public bool TriggerPressed => InputHand.Trigger > 0.5f;
+		Transmit = TransmitType.Always;
+	}
 
-		public virtual Input.VrHand InputHand { get; }
+	public override void FrameSimulate( Client cl )
+	{
+		base.FrameSimulate( cl );
 
-		public override void Spawn()
-		{
-			SetModel( ModelPath );
+		Transform = InputHand.Transform;
+	}
 
-			Position = InputHand.Transform.Position;
-			Rotation = InputHand.Transform.Rotation;
+	public override void Simulate( Client cl )
+	{
+		base.Simulate( cl );
 
-			Transmit = TransmitType.Always;
-		}
+		Transform = InputHand.Transform;
+		Animate();
+	}
 
-		public override void FrameSimulate( Client cl )
-		{
-			base.FrameSimulate( cl );
-
-			Transform = InputHand.Transform;
-		}
-
-		public override void Simulate( Client cl )
-		{
-			base.Simulate( cl );
-
-			Transform = InputHand.Transform;
-			Animate();
-		}
-
-		private void Animate()
-		{
-			SetAnimParameter( "Index", InputHand.GetFingerCurl( 1 ) );
-			SetAnimParameter( "Middle", InputHand.GetFingerCurl( 2 ) );
-			SetAnimParameter( "Ring", InputHand.GetFingerCurl( 3 ) );
-			SetAnimParameter( "Thumb", InputHand.GetFingerCurl( 0 ) );
-		}
+	private void Animate()
+	{
+		SetAnimParameter( "Index", InputHand.GetFingerCurl( 1 ) );
+		SetAnimParameter( "Middle", InputHand.GetFingerCurl( 2 ) );
+		SetAnimParameter( "Ring", InputHand.GetFingerCurl( 3 ) );
+		SetAnimParameter( "Thumb", InputHand.GetFingerCurl( 0 ) );
 	}
 }
