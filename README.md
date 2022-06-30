@@ -10,7 +10,7 @@ Basic minimal setup for VR in s&box.
 2. Launch s&box with the `-vr` launch argument
 3. Create your addon using the template shown in the addon manager.
 
-![image](https://user-images.githubusercontent.com/12881812/176690945-6153b35a-83ad-47cb-b94e-b81b7986e945.png)
+![image](https://user-images.githubusercontent.com/12881812/176691322-d4868b32-c43f-4165-b4fc-4b3ad24d3033.png)
 
 ### Manually cloning & adding
 
