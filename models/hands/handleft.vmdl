@@ -90,7 +90,7 @@
 				[
 					{
 						_class = "ModelModifier_ScaleAndMirror"
-						scale = 1.0
+						scale = 0.7
 						mirror_x = false
 						mirror_y = true
 						mirror_z = false
