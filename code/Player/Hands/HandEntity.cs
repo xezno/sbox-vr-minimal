@@ -4,9 +4,9 @@ namespace VrExample;
 
 public partial class HandEntity : AnimatedEntity
 {
-	[Net] public HandEntity Other { get; set; }
-
 	protected virtual string ModelPath => "";
+
+	[Net] public HandEntity Other { get; set; }
 
 	public bool GripPressed => InputHand.Grip > 0.5f;
 	public bool TriggerPressed => InputHand.Trigger > 0.5f;
@@ -16,9 +16,6 @@ public partial class HandEntity : AnimatedEntity
 	public override void Spawn()
 	{
 		SetModel( ModelPath );
-
-		Position = InputHand.Transform.Position;
-		Rotation = InputHand.Transform.Rotation;
 
 		Transmit = TransmitType.Always;
 	}
