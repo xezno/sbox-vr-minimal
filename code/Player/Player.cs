@@ -32,6 +32,7 @@ partial class Player : Sandbox.Player
 		{
 			Controller = new WalkController();
 			Animator = new PlayerAnimator();
+			CameraMode = new FirstPersonCamera();
 		}
 		else
 		{
