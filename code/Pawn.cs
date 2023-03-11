@@ -1,93 +1,68 @@
 ﻿using Sandbox;
-using System.ComponentModel;
 
 namespace MyGame;
 
-public partial class Pawn : AnimatedEntity
+public partial class Pawn : Entity
 {
-	[ClientInput]
-	public Vector3 InputDirection { get; set; }
+	[ClientInput] public Vector3 InputDirection { get; set; }
+	[ClientInput] public Angles ViewAngles { get; set; }
 
-	[ClientInput]
-	public Angles ViewAngles { get; set; }
+	private BBox _bbox = new BBox(
+		new Vector3( -16, -16, 0 ),
+		new Vector3( 16, 16, 64 )
+	);
 
-	/// <summary>
-	/// Position a player should be looking from in world space.
-	/// </summary>
-	[Browsable( false )]
-	public Vector3 EyePosition
+	public BBox Hull { get; set; }
+
+	private BBox GetHull()
 	{
-		get => Transform.PointToWorld( EyeLocalPosition );
-		set => EyeLocalPosition = Transform.PointToLocal( value );
-	}
+		var headLocal = Transform.ToLocal( Input.VR.Head );
 
-	/// <summary>
-	/// Position a player should be looking from in local to the entity coordinates.
-	/// </summary>
-	[Net, Predicted, Browsable( false )]
-	public Vector3 EyeLocalPosition { get; set; }
+		var mins = _bbox.Mins + (headLocal.Position.WithZ( 0.0f ) * Rotation);
+		var maxs = _bbox.Maxs + (headLocal.Position.WithZ( 0.0f ) * Rotation);
 
-	/// <summary>
-	/// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity.
-	/// </summary>
-	[Browsable( false )]
-	public Rotation EyeRotation
-	{
-		get => Transform.RotationToWorld( EyeLocalRotation );
-		set => EyeLocalRotation = Transform.RotationToLocal( value );
-	}
-
-	/// <summary>
-	/// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity. In local to the entity coordinates.
-	/// </summary>
-	[Net, Predicted, Browsable( false )]
-	public Rotation EyeLocalRotation { get; set; }
-
-	public BBox Hull
-	{
-		get => new
-		(
-			new Vector3( -16, -16, 0 ),
-			new Vector3( 16, 16, 64 )
-		);
+		return new BBox( mins, maxs );
 	}
 
 	[BindComponent] public PawnController Controller { get; }
-	[BindComponent] public PawnAnimator Animator { get; }
 
-	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
+	[Net] public Hand LeftHand { get; set; }
+	[Net] public Hand RightHand { get; set; }
+	[Net] public Head Head { get; set; }
 
 	/// <summary>
 	/// Called when the entity is first created 
 	/// </summary>
 	public override void Spawn()
 	{
-		SetModel( "models/citizen/citizen.vmdl" );
+		Head = new Head();
+		Head.Owner = this;
+		Head.SetParent( this );
 
-		EnableDrawing = true;
-		EnableHideInFirstPerson = true;
-		EnableShadowInFirstPerson = true;
+		LeftHand = new Hand() { InputHand = Hands.Left };
+		LeftHand.Owner = this;
+		LeftHand.SetParent( this );
+
+		RightHand = new Hand() { InputHand = Hands.Right };
+		RightHand.Owner = this;
+		RightHand.SetParent( this );
 	}
 
 	public void Respawn()
 	{
 		Components.Create<PawnController>();
-		Components.Create<PawnAnimator>();
-	}
-
-	public void DressFromClient( IClient cl )
-	{
-		var c = new ClothingContainer();
-		c.LoadFromClient( cl );
-		c.DressEntity( this );
 	}
 
 	public override void Simulate( IClient cl )
 	{
 		SimulateRotation();
+
+		Hull = _bbox;
+
+		LeftHand?.Simulate( cl );
+		RightHand?.Simulate( cl );
+
 		Controller?.Simulate( cl );
-		Animator?.Simulate();
-		EyeLocalPosition = Vector3.Up * (64f * Scale);
 	}
 
 	public override void BuildInput()
@@ -96,9 +71,7 @@ public partial class Pawn : AnimatedEntity
 		var headAngles = Input.VR.Head.Rotation.Angles();
 
 		var moveRotation = Rotation.From( 0, headAngles.yaw, 0 );
-		InputDirection = new Vector3( -analogValue.y, analogValue.x, 0 ) * moveRotation;
-
-		DebugOverlay.Line( Position, Position + InputDirection * 128f, 0, false );
+		InputDirection = new Vector3( analogValue.y, -analogValue.x, 0 ) * moveRotation;
 
 		if ( Input.StopProcessing )
 			return;
@@ -119,11 +92,6 @@ public partial class Pawn : AnimatedEntity
 
 	public override void FrameSimulate( IClient cl )
 	{
-		SimulateRotation();
-
-		Camera.Rotation = ViewAngles.ToRotation();
-		Camera.Position = EyePosition;
-		Camera.FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
 		Camera.FirstPersonViewer = this;
 	}
 
@@ -132,7 +100,7 @@ public partial class Pawn : AnimatedEntity
 		return TraceBBox( start, end, Hull.Mins, Hull.Maxs, liftFeet );
 	}
 
-	public TraceResult TraceBBox( Vector3 start, Vector3 end, Vector3 mins, Vector3 maxs, float liftFeet = 0.0f )
+	private TraceResult TraceBBox( Vector3 start, Vector3 end, Vector3 mins, Vector3 maxs, float liftFeet = 0.0f )
 	{
 		if ( liftFeet > 0 )
 		{
@@ -149,9 +117,40 @@ public partial class Pawn : AnimatedEntity
 		return tr;
 	}
 
-	protected void SimulateRotation()
+	private TimeSince _timeSinceLastRotation;
+	private void SimulateRotation()
 	{
-		EyeRotation = ViewAngles.ToRotation();
-		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
+		const float Deadzone = 0.2f;
+		const float Angle = 45f;
+		const float Delay = 0.25f;
+
+		float rotate = Input.VR.RightHand.Joystick.Value.x;
+
+		if ( _timeSinceLastRotation > Delay )
+		{
+			if ( rotate > Deadzone )
+			{
+				Transform = Transform.RotateAround(
+					Input.VR.Head.Position.WithZ( Position.z ),
+					Rotation.FromAxis( Vector3.Up, -Angle )
+				);
+
+				_timeSinceLastRotation = 0;
+			}
+			else if ( rotate < -Deadzone )
+			{
+				Transform = Transform.RotateAround(
+					Input.VR.Head.Position.WithZ( Position.z ),
+					Rotation.FromAxis( Vector3.Up, Angle )
+				);
+
+				_timeSinceLastRotation = 0;
+			}
+		}
+
+		if ( rotate > -Deadzone && rotate < Deadzone )
+		{
+			_timeSinceLastRotation = 10;
+		}
 	}
 }
