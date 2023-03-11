@@ -39,13 +39,17 @@ public partial class Pawn : Entity
 		Head.Owner = this;
 		Head.SetParent( this );
 
-		LeftHand = new HandEntity() { InputHand = Hands.Left };
-		LeftHand.Owner = this;
-		LeftHand.SetParent( this );
+		PrefabLibrary.TrySpawn<HandEntity>( "prefabs/hands/left.prefab", out var leftHand );
+		leftHand.InputHand = Hands.Left;
+		leftHand.Owner = this;
+		leftHand.SetParent( this );
+		LeftHand = leftHand;
 
-		RightHand = new HandEntity() { InputHand = Hands.Right };
-		RightHand.Owner = this;
-		RightHand.SetParent( this );
+		PrefabLibrary.TrySpawn<HandEntity>( "prefabs/hands/right.prefab", out var rightHand );
+		rightHand.InputHand = Hands.Right;
+		rightHand.Owner = this;
+		rightHand.SetParent( this );
+		RightHand = rightHand;
 	}
 
 	public void Respawn()

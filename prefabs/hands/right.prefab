@@ -1,0 +1,56 @@
+{
+  "SchemaVersion": 1,
+  "Name": null,
+  "Description": null,
+  "Root": {
+    "Guid": "42ef6b31-90a4-42a6-9a7e-d8a9db8e4886",
+    "Class": "HandEntity",
+    "Entities": [
+      {
+        "Guid": "fbda379c-74ab-4ab1-8dbb-cd3834372250",
+        "Class": "model_entity",
+        "Entities": [],
+        "Components": [],
+        "Keys": {
+          "Model": {
+            "Type": "Model",
+            "Value": "\u0022models/hands/alyx_hand_right.vmdl\u0022"
+          },
+          "_name": {
+            "Value": "\u0022Right Hand Model\u0022"
+          },
+          "_localposition": {
+            "Value": "\u0022-3.75,0,0\u0022"
+          },
+          "_localrotation": {
+            "Value": "\u002290,0,0\u0022"
+          },
+          "_scale": {
+            "Value": "1"
+          },
+          "_tags": {
+            "Value": "\u0022\u0022"
+          }
+        }
+      }
+    ],
+    "Components": [],
+    "Keys": {
+      "_name": {
+        "Value": "\u0022Right Hand\u0022"
+      },
+      "_localposition": {
+        "Value": "\u00220,0,0\u0022"
+      },
+      "_localrotation": {
+        "Value": "\u00220,0,0\u0022"
+      },
+      "_scale": {
+        "Value": "1"
+      },
+      "_tags": {
+        "Value": "\u0022hand right\u0022"
+      }
+    }
+  }
+}
