@@ -3,7 +3,7 @@ using Sandbox.Diagnostics;
 
 namespace MyGame;
 
-public partial class Hand : Entity
+public partial class HandEntity : Entity
 {
 	[Net] public Hands InputHand { get; set; }
 
@@ -12,8 +12,6 @@ public partial class Hand : Entity
 		Transmit = TransmitType.Always;
 
 		EnableDrawing = true;
-		EnableHideInFirstPerson = true;
-		EnableShadowInFirstPerson = true;
 	}
 
 	public override void Simulate( IClient cl )

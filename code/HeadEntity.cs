@@ -1,6 +1,6 @@
 ﻿namespace Sandbox;
 
-public class Head : ModelEntity
+public class HeadEntity : ModelEntity
 {
 	public override void Spawn()
 	{

@@ -26,24 +26,24 @@ public partial class Pawn : Entity
 
 	[BindComponent] public PawnController Controller { get; }
 
-	[Net] public Hand LeftHand { get; set; }
-	[Net] public Hand RightHand { get; set; }
-	[Net] public Head Head { get; set; }
+	[Net] public HandEntity LeftHand { get; set; }
+	[Net] public HandEntity RightHand { get; set; }
+	[Net] public HeadEntity Head { get; set; }
 
 	/// <summary>
 	/// Called when the entity is first created 
 	/// </summary>
 	public override void Spawn()
 	{
-		Head = new Head();
+		Head = new HeadEntity();
 		Head.Owner = this;
 		Head.SetParent( this );
 
-		LeftHand = new Hand() { InputHand = Hands.Left };
+		LeftHand = new HandEntity() { InputHand = Hands.Left };
 		LeftHand.Owner = this;
 		LeftHand.SetParent( this );
 
-		RightHand = new Hand() { InputHand = Hands.Right };
+		RightHand = new HandEntity() { InputHand = Hands.Right };
 		RightHand.Owner = this;
 		RightHand.SetParent( this );
 	}
