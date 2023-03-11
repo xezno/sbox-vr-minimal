@@ -35,10 +35,18 @@ public partial class Pawn : Entity
 	/// </summary>
 	public override void Spawn()
 	{
+		//
+		// Create a head so that other clients can see where we're looking
+		//
 		Head = new HeadEntity();
 		Head.Owner = this;
 		Head.SetParent( this );
 
+		//
+		// Load the hands based on the prefabs inside the prefabs/hands/ directory.
+		// You ideally shouldn't be changing this code unless you need to - the prefab
+		// system will handle loading the correct model for the hand.
+		//
 		PrefabLibrary.TrySpawn<HandEntity>( "prefabs/hands/left.prefab", out var leftHand );
 		leftHand.InputHand = Hands.Left;
 		leftHand.Owner = this;
@@ -122,6 +130,7 @@ public partial class Pawn : Entity
 	}
 
 	private TimeSince _timeSinceLastRotation;
+
 	private void SimulateRotation()
 	{
 		const float Deadzone = 0.2f;

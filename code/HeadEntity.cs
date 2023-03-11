@@ -1,5 +1,9 @@
 ﻿namespace Sandbox;
 
+/// <summary>
+/// This represents the player's head. It mainly exists so that other players
+/// can see what you're looking at.
+/// </summary>
 public class HeadEntity : ModelEntity
 {
 	public override void Spawn()

@@ -3,9 +3,17 @@ using Sandbox.Diagnostics;
 
 namespace MyGame;
 
+/// <summary>
+/// This represents a hand. You should use prefabs to create these and attach
+/// models, snap points, etc. depending on what sort of game you're going for.
+/// </summary>
 [Prefab, Title( "VR Hand Entity" )]
 public partial class HandEntity : Entity
 {
+	/// <summary>
+	/// This should either be Hands.Left or Hands.Right and determines the
+	/// hand used for input (i.e. transform)
+	/// </summary>
 	[Net] public Hands InputHand { get; set; }
 
 	public override void Spawn()
