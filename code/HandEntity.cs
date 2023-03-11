@@ -3,15 +3,31 @@ using Sandbox.Diagnostics;
 
 namespace MyGame;
 
-public partial class HandEntity : Entity
+public partial class HandEntity : ModelEntity
 {
-	[Net] public Hands InputHand { get; set; }
+	[Net] public Hands NetInputHand { get; set; }
+
+	public Hands InputHand
+	{
+		get => NetInputHand;
+		set
+		{
+			NetInputHand = value;
+			SetHandModel();
+		}
+	}
 
 	public override void Spawn()
 	{
 		Transmit = TransmitType.Always;
 
 		EnableDrawing = true;
+	}
+
+	private void SetHandModel()
+	{
+		var model = InputHand == Hands.Left ? "models/hands/alyx_hand_left.vmdl" : "models/hands/alyx_hand_right.vmdl";
+		SetModel( model );
 	}
 
 	public override void Simulate( IClient cl )
