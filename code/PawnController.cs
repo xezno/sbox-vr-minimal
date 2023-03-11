@@ -49,24 +49,18 @@ public class PawnController : EntityComponent<Pawn>
 			DoJump();
 		}
 
-		var position = Input.VR.Head.Position.WithZ( Entity.Position.z );
-		position = Entity.Position;
-		DebugOverlay.Sphere( position, 16f, Grounded ? Color.Blue : Color.Red, 0, false );
-
 		var mh = new MoveHelper( Entity.Position, Entity.Velocity );
 		mh.Trace = mh.Trace.Size( Entity.Hull ).Ignore( Entity );
 
 		if ( mh.TryMoveWithStep( Time.Delta, StepSize ) > 0 )
 		{
-			// if ( Grounded )
-			// mh.Position = StayOnGround( mh.Position );
+			if ( Grounded )
+				mh.Position = StayOnGround( mh.Position );
+
+			Entity.Position = mh.Position;
+			Entity.Velocity = mh.Velocity;
 		}
 
-		DebugOverlay.Sphere( mh.Position, 16f, Color.Green, 0, false );
-		var diff = mh.Position - position;
-
-		Entity.Position = Entity.Position + diff;
-		Entity.Velocity = mh.Velocity;
 		Entity.GroundEntity = groundEntity;
 	}
 
