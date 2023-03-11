@@ -17,11 +17,6 @@ namespace MyGame;
 /// </summary>
 public partial class MyGame : Sandbox.GameManager
 {
-	public MyGame()
-	{
-		Game.TickRate = 60;
-	}
-
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
